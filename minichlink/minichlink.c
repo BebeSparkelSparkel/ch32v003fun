@@ -286,12 +286,12 @@ keep_going:
 
 				if( argchar[1] == 'G' && SetupGDBServer( dev ) )
 				{
-					printf( "Error: can't start GDB server\n" );
+					fprintf( stderr, "Error: can't start GDB server\n" );
 					return -1;
 				}
 				if( argchar[1] == 'G' )
 				{
-					printf( "GDBServer Running\n" );
+					// No further action.
 				}
 				else if( argchar[1] == 'T' )
 				{

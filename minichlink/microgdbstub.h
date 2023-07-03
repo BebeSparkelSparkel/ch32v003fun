@@ -503,6 +503,9 @@ static int GDBListen( void * dev )
 		return -1;
 	}
 	
+
+	fprintf( stderr, "gdbserver running on port %d\n", MICROGDBSTUB_PORT );
+
 	return 0;
 }
 
@@ -513,9 +516,13 @@ int MicroGDBPollServer( void * dev )
 	int pollct = 1;
 	struct pollfd allpolls[1] = { 0 };
 	allpolls[0].fd = serverSocket;
+#if defined( WIN32 ) || defined( _WIN32 )
 	allpolls[0].events = 0x00000100; //POLLRDNORM;
-	int r = poll( allpolls, pollct, 0 );
-	
+#else
+	allpolls[0].events = POLLIN;
+#endif
+	int r = poll( allpolls, pollct, 100 );
+
 	if( r < 0 )
 	{
 		printf( "R: %d\n", r );
@@ -552,6 +559,7 @@ int MicroGDBPollServer( void * dev )
 			serverSocket = tsocket;
 			listenMode = 2;
 			gdbbufferstate = 0;
+			fprintf( stderr, "Connection established to gdbserver backend\n" );
 			RVNetConnect( dev );
 			// Established.
 		}
