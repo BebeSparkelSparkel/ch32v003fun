@@ -23,6 +23,15 @@ static int __puts_uart(char *s, int len, void *buf)
 	return len;
 }
 
+int snprintf(char * buffer, unsigned int buffer_len, const char* format, ...)
+{
+	va_list args;
+	va_start( args, format );
+	int ret = mini_vsnprintf( buffer, buffer_len, format, args );
+	va_end( args );
+	return ret;
+}
+
 int printf(const char* format, ...)
 {
 	va_list args;
